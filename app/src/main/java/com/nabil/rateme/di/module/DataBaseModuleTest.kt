@@ -1,4 +1,4 @@
-package com.nabil.rateme.di
+package com.nabil.rateme.di.module
 
 import android.content.Context
 import androidx.room.Room
@@ -7,14 +7,19 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
+/**
+ * dagger module to provide ROOM INSTANCE for testing
+ */
 @Module
-class DatabaseModule {
+class DataBaseModuleTest {
+
     @Singleton
     @Provides
     fun getDatabase(context: Context): MovieDatabase {
-        return Room.databaseBuilder(
+        return Room.inMemoryDatabaseBuilder(
             context,
-            MovieDatabase::class.java, "database-movies"
-        ).fallbackToDestructiveMigration().build()
+            MovieDatabase::class.java
+        ).allowMainThreadQueries().build()
     }
+
 }
