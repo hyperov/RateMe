@@ -17,5 +17,5 @@ interface MovieDAO {
     fun loadAllMovies(): Observable<List<Movie>>
 
     @Query("UPDATE movies SET rating = :rating WHERE name = :movieName")
-    fun updateMovieRating(movieName: String, rating: Int): Observable<Movie>
+    fun updateMovieRating(movieName: String, rating: Int): Int
 }
