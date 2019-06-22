@@ -1,13 +1,12 @@
 package com.nabil.rateme.viewmodel
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nabil.rateme.TrampolineSchedulerProvider
 import com.nabil.rateme.model.Movie
 import com.nabil.rateme.model.MoviesRepository
 import com.nabil.rateme.model.Repository
 import io.reactivex.Observable
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 import org.mockito.Mockito
 
 class MoviesViewModelTest {
@@ -15,6 +14,8 @@ class MoviesViewModelTest {
     private lateinit var moviesRepository: Repository
     private lateinit var mainViewModel: MoviesViewModel
 
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
@@ -59,4 +60,7 @@ class MoviesViewModelTest {
         mainViewModel.updateMovie(movie.name, movie.rating)
         Mockito.verify(moviesRepository).updateMovieRating(movie.name, movie.rating)
     }
+
+
+
 }

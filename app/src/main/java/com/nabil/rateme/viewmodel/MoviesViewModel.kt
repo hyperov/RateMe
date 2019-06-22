@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.nabil.rateme.BaseSchedulerProvider
 import com.nabil.rateme.model.Movie
 import com.nabil.rateme.model.Repository
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class MoviesViewModel @Inject constructor(val moviesRepository: Repository) : ViewModel() {
@@ -16,15 +18,43 @@ class MoviesViewModel @Inject constructor(val moviesRepository: Repository) : Vi
 
     val moviesLiveData = MutableLiveData<List<Movie>>()
 
+    private val disposable = CompositeDisposable()
+
     fun insertMovies(vararg movie: Movie) {
-        moviesRepository.insertAllMovies(*movie)
+        val subscribe = Observable
+            .fromCallable { moviesRepository.insertAllMovies(*movie) }
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
+            .doOnSubscribe { progressLiveData.value = true }
+            .doOnComplete { progressLiveData.value = false }
+            .subscribe({ }, { t: Throwable? -> errorLiveData.value = t!!.message })
+        disposable.add(subscribe)
     }
 
     fun loadMovies() {
-
+        val subscribe = moviesRepository.loadAllMovies()
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
+            .doOnSubscribe { progressLiveData.value = true }
+            .doOnComplete { progressLiveData.value = false }
+            .subscribe({ movies: List<Movie>? -> moviesLiveData.value = movies },
+                { t: Throwable? -> errorLiveData.value = t!!.message })
+        disposable.add(subscribe)
     }
 
     fun updateMovie(name: String, rating: Int) {
+        val subscribe = Observable
+            .fromCallable { moviesRepository.updateMovieRating(name, rating) }
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
+            .doOnSubscribe { progressLiveData.value = true }
+            .doOnComplete { progressLiveData.value = false }
+            .subscribe({}, { t: Throwable? -> errorLiveData.value = t!!.message })
+        disposable.add(subscribe)
+    }
 
+    override fun onCleared() {
+        super.onCleared()
+        disposable.clear()
     }
 }

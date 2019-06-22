@@ -61,4 +61,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     androidTestImplementation 'androidx.arch.core:core-testing:2.0.1'
+    testImplementation 'androidx.arch.core:core-testing:2.0.1'
 }
