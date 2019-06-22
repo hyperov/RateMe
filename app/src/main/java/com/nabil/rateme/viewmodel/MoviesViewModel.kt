@@ -2,12 +2,15 @@ package com.nabil.rateme.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.nabil.rateme.BaseSchedulerProvider
 import com.nabil.rateme.model.Movie
 import com.nabil.rateme.model.Repository
 import javax.inject.Inject
 
 class MoviesViewModel @Inject constructor(val moviesRepository: Repository) : ViewModel() {
 
+    @Inject
+    lateinit var schedulerProvider: BaseSchedulerProvider
     val progressLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<String>()
 

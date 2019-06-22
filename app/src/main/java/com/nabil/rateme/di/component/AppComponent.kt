@@ -4,6 +4,7 @@ import android.content.Context
 import com.nabil.rateme.application.MyApp
 import com.nabil.rateme.di.module.DatabaseModule
 import com.nabil.rateme.di.module.RepositoryModule
+import com.nabil.rateme.di.module.SchedulerModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -15,6 +16,7 @@ import javax.inject.Singleton
     modules = [
         DatabaseModule::class,
         RepositoryModule::class,
+        SchedulerModule::class,
         AndroidInjectionModule::class
     ]
 )

@@ -1,5 +1,6 @@
 package com.nabil.rateme.viewmodel
 
+import com.nabil.rateme.TrampolineSchedulerProvider
 import com.nabil.rateme.model.Movie
 import com.nabil.rateme.model.MoviesRepository
 import com.nabil.rateme.model.Repository
@@ -14,10 +15,12 @@ class MoviesViewModelTest {
     private lateinit var moviesRepository: Repository
     private lateinit var mainViewModel: MoviesViewModel
 
+
     @Before
     fun setUp() {
         moviesRepository = Mockito.mock(MoviesRepository::class.java)
         mainViewModel = MoviesViewModel(moviesRepository)
+        mainViewModel.schedulerProvider = TrampolineSchedulerProvider()
     }
 
     @After
