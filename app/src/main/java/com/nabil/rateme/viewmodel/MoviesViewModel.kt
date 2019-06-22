@@ -3,6 +3,7 @@ package com.nabil.rateme.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.nabil.rateme.BaseSchedulerProvider
+import com.nabil.rateme.livedata.SingleLiveEvent
 import com.nabil.rateme.model.Movie
 import com.nabil.rateme.model.Repository
 import io.reactivex.Observable
@@ -13,9 +14,9 @@ class MoviesViewModel @Inject constructor(val moviesRepository: Repository) : Vi
 
     @Inject
     lateinit var schedulerProvider: BaseSchedulerProvider
-    val progressLiveData = MutableLiveData<Boolean>()
-    val errorLiveData = MutableLiveData<String>()
 
+    val progressLiveData = SingleLiveEvent<Boolean>()
+    val errorLiveData = MutableLiveData<String>()
     val moviesLiveData = MutableLiveData<List<Movie>>()
 
     private val disposable = CompositeDisposable()
@@ -26,7 +27,7 @@ class MoviesViewModel @Inject constructor(val moviesRepository: Repository) : Vi
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
             .doOnSubscribe { progressLiveData.value = true }
-            .doOnComplete { progressLiveData.value = false }
+            .doFinally { progressLiveData.value = false }
             .subscribe({ }, { t: Throwable? -> errorLiveData.value = t!!.message })
         disposable.add(subscribe)
     }
@@ -35,8 +36,8 @@ class MoviesViewModel @Inject constructor(val moviesRepository: Repository) : Vi
         val subscribe = moviesRepository.loadAllMovies()
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
-            .doOnSubscribe { progressLiveData.value = true }
-            .doOnComplete { progressLiveData.value = false }
+            .doOnSubscribe { progressLiveData.postValue(true )}
+            .doFinally { progressLiveData.postValue(false )}
             .subscribe({ movies: List<Movie>? -> moviesLiveData.value = movies },
                 { t: Throwable? -> errorLiveData.value = t!!.message })
         disposable.add(subscribe)
@@ -48,7 +49,7 @@ class MoviesViewModel @Inject constructor(val moviesRepository: Repository) : Vi
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
             .doOnSubscribe { progressLiveData.value = true }
-            .doOnComplete { progressLiveData.value = false }
+            .doFinally { progressLiveData.value = false }
             .subscribe({}, { t: Throwable? -> errorLiveData.value = t!!.message })
         disposable.add(subscribe)
     }
