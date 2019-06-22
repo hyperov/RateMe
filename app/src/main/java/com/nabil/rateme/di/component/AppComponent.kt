@@ -3,6 +3,7 @@ package com.nabil.rateme.di.component
 import android.content.Context
 import com.nabil.rateme.application.MyApp
 import com.nabil.rateme.di.module.DatabaseModule
+import com.nabil.rateme.di.module.RepositoryModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -13,6 +14,7 @@ import javax.inject.Singleton
 @Component(
     modules = [
         DatabaseModule::class,
+        RepositoryModule::class,
         AndroidInjectionModule::class
     ]
 )

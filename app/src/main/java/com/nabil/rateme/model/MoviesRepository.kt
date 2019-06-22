@@ -1,20 +1,23 @@
 package com.nabil.rateme.model
 
-import androidx.room.RoomDatabase
+import com.nabil.rateme.model.room.MovieDAO
+import com.nabil.rateme.model.room.MovieDatabase
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class MoviesRepository @Inject constructor(val database: RoomDatabase) : Repository {
+class MoviesRepository @Inject constructor(val database: MovieDatabase) : Repository {
+
+    private var movieDAO: MovieDAO = database.getMoviesDao()
 
     override fun insertAllMovies(vararg movie: Movie): List<Long> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return movieDAO.insertAllMovies(*movie)
     }
 
     override fun loadAllMovies(): Observable<List<Movie>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return movieDAO.loadAllMovies()
     }
 
     override fun updateMovieRating(movieName: String, rating: Int): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return movieDAO.updateMovieRating(movieName, rating)
     }
 }

@@ -18,9 +18,9 @@ class MoviesRepositoryTest {
     @Before
     fun setUp() {
         movieDatabase = mock(MovieDatabase::class.java)
+        `when`(movieDatabase.getMoviesDao()).thenReturn(mock(MovieDAO::class.java))
         moviesRepository = MoviesRepository(movieDatabase)
 
-        `when`(movieDatabase.getMoviesDao()).thenReturn(mock(MovieDAO::class.java))
         movieDAO = movieDatabase.getMoviesDao()
     }
 
