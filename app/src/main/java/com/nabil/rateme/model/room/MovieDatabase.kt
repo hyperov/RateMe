@@ -10,5 +10,5 @@ import com.nabil.rateme.model.Movie
  */
 @Database(entities = [Movie::class], version = 1, exportSchema = false)
 abstract class MovieDatabase : RoomDatabase() {
-    abstract fun getAdsDao(): MovieDAO
+    abstract fun getMoviesDao(): MovieDAO
 }

@@ -34,7 +34,7 @@ class RoomTest {
             MovieDatabase::class.java
         ).allowMainThreadQueries().build()
 
-        movieDAO = database.getAdsDao()
+        movieDAO = database.getMoviesDao()
 
     }
 
