@@ -8,10 +8,8 @@ import com.nabil.rateme.model.MoviesRepository
 import com.nabil.rateme.model.Repository
 import io.reactivex.Observable
 import org.junit.*
-import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
-import org.mockito.internal.verification.Times
+
 
 class MoviesViewModelTest {
 
@@ -19,6 +17,7 @@ class MoviesViewModelTest {
     private lateinit var mainViewModel: MoviesViewModel
     private lateinit var progressObserver: Observer<Boolean>
     private lateinit var errorObserver: Observer<String>
+    private lateinit var moviesObserver: Observer<List<Movie>>
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -30,9 +29,11 @@ class MoviesViewModelTest {
         mainViewModel.schedulerProvider = TrampolineSchedulerProvider()
         progressObserver = mock(Observer<Boolean> {}.javaClass)
         errorObserver = mock(Observer<String> {}.javaClass)
+        moviesObserver = mock(Observer<List<Movie>> {}.javaClass)
 
         mainViewModel.progressLiveData.observeForever(progressObserver)
         mainViewModel.errorLiveData.observeForever(errorObserver)
+        mainViewModel.moviesLiveData.observeForever(moviesObserver)
     }
 
     @After
@@ -87,10 +88,7 @@ class MoviesViewModelTest {
     }
 
     @Test
-    fun test_progressLiveData_value() {
-        mainViewModel.progressLiveData.postValue(true)
-
-        assert(mainViewModel.progressLiveData.value == true)
+    fun test_progressLiveData_value_from_loadMovies() {
 
         val movie = Movie(name = "Avengers", image = 4, rating = 9)
 
@@ -100,20 +98,76 @@ class MoviesViewModelTest {
         mainViewModel.loadMovies()
 
         verify(progressObserver).onChanged(true)
-//        verify(progressObserver, times(2)).onChanged(false)
-    }
-
-    @Test
-    fun test_errorLiveData_value() {
-        mainViewModel.errorLiveData.postValue("error_message")
-
-        assert(mainViewModel.errorLiveData.value == "error_message")
+        verify(progressObserver).onChanged(false)
 
 
     }
 
     @Test
-    fun test_moviesLiveData_value_from_loadMovies() {
+    fun test_progressLiveData_value_from_insertMovies() {
+
+        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+
+        `when`(moviesRepository.insertAllMovies(movie))
+            .thenReturn(listOf(1))
+
+        mainViewModel.insertMovies(movie)
+        verify(progressObserver).onChanged(true)
+        verify(progressObserver).onChanged(false)
+    }
+
+    @Test
+    fun test_progressLiveData_value_from_updateMovies() {
+
+        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+
+        `when`(moviesRepository.updateMovieRating(movie.name, movie.rating))
+            .thenReturn(1)
+
+        mainViewModel.updateMovie(movie.name, movie.rating)
+        verify(progressObserver).onChanged(true)
+        verify(progressObserver).onChanged(false)
+    }
+
+    @Test
+    fun test_errorLiveData_value_loadMovies() {
+
+        `when`(moviesRepository.loadAllMovies())
+            .then { Observable.error<Any>(Exception("error")) }
+
+        mainViewModel.loadMovies()
+
+        verify(errorObserver).onChanged("error")
+
+    }
+
+    @Test
+    fun test_errorLiveData_value_insertMovies() {
+        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+
+        `when`(moviesRepository.insertAllMovies(movie))
+            .then { null }
+
+        mainViewModel.insertMovies(movie)
+        verify(errorObserver).onChanged("Callable returned null")
+    }
+
+    @Test
+    fun test_errorLiveData_value_updateMovies() {
+
+        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+
+        `when`(moviesRepository.updateMovieRating(movie.name, movie.rating))
+            .then {Exception("error") }
+
+        mainViewModel.updateMovie(movie.name, movie.rating)
+
+        verify(errorObserver).onChanged("java.lang.Exception cannot be cast to java.lang.Integer")
+
+    }
+
+    @Test
+    fun test_moviesLiveData_value() {
 
         val movie = Movie(name = "Avengers", image = 4, rating = 9)
 
@@ -121,18 +175,7 @@ class MoviesViewModelTest {
             .thenReturn(Observable.just(listOf(movie)))
 
         mainViewModel.loadMovies()
-        assert(mainViewModel.moviesLiveData.value == listOf(movie))
-    }
+        verify(moviesObserver).onChanged(listOf(movie))
 
-    @Test
-    fun test_moviesLiveData_value_from_() {
-
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
-
-        `when`(moviesRepository.loadAllMovies())
-            .thenReturn(Observable.just(listOf(movie)))
-
-        mainViewModel.loadMovies()
-        assert(mainViewModel.moviesLiveData.value == listOf(movie))
     }
 }
