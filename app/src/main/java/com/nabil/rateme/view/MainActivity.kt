@@ -1,15 +1,30 @@
 package com.nabil.rateme.view
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.nabil.rateme.R
-
+import com.nabil.rateme.viewmodel.MoviesViewModel
+import com.nabil.rateme.viewmodel.ViewModelFactory
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HasAndroidInjector {
+
+    @Inject internal lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    @Inject lateinit var viewModelFactory: ViewModelFactory
+
+    private lateinit var moviesViewModel: MoviesViewModel
+
+
+    override fun androidInjector(): AndroidInjector<Any> {
+        return androidInjector
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
