@@ -12,7 +12,7 @@ class MoviesViewModel @Inject constructor(val moviesRepository: Repository) : Vi
 
     }
 
-    fun loadMovies(vararg movie: Movie): Observable<List<Movie>> {
+    fun loadMovies(): Observable<List<Movie>> {
         return Observable.fromIterable(emptyList())
     }
 

@@ -1,5 +1,8 @@
-package com.nabil.rateme.model
+package com.nabil.rateme
 
+import com.nabil.rateme.model.Movie
+import com.nabil.rateme.model.MoviesRepository
+import com.nabil.rateme.model.Repository
 import com.nabil.rateme.model.room.MovieDAO
 import com.nabil.rateme.model.room.MovieDatabase
 import io.reactivex.Observable
@@ -40,7 +43,7 @@ class MoviesRepositoryTest {
     }
 
     @Test
-    fun loadAllMovies() {
+    fun test_loadAllMovies_in_database_true() {
         val movie = Movie(name = "Avengers", image = 4, rating = 9)
 
         `when`(movieDAO.loadAllMovies())
@@ -52,7 +55,7 @@ class MoviesRepositoryTest {
     }
 
     @Test
-    fun updateMovieRating() {
+    fun test_updateMovieRating_in_database_true() {
 
         val movie = Movie(name = "Avengers", image = 4, rating = 9)
 
