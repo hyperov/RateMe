@@ -2,10 +2,7 @@ package com.nabil.rateme.di.component
 
 import android.content.Context
 import com.nabil.rateme.application.MyApp
-import com.nabil.rateme.di.module.DatabaseModule
-import com.nabil.rateme.di.module.RepositoryModule
-import com.nabil.rateme.di.module.SchedulerModule
-import com.nabil.rateme.di.module.ViewModelModule
+import com.nabil.rateme.di.module.*
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -19,6 +16,7 @@ import javax.inject.Singleton
         RepositoryModule::class,
         SchedulerModule::class,
         ViewModelModule::class,
+        MainActivityModule::class,
         AndroidInjectionModule::class
     ]
 )
