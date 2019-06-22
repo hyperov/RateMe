@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.nabil.rateme.R
 import com.nabil.rateme.viewmodel.MoviesViewModel
@@ -16,8 +17,10 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasAndroidInjector {
 
-    @Inject internal lateinit var androidInjector: DispatchingAndroidInjector<Any>
-    @Inject lateinit var viewModelFactory: ViewModelFactory
+    @Inject
+    internal lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var moviesViewModel: MoviesViewModel
 
@@ -30,11 +33,16 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        createViewModel()
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+    }
+
+    private fun createViewModel() {
+        moviesViewModel = ViewModelProviders.of(this, viewModelFactory).get(MoviesViewModel::class.java)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
