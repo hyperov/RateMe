@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".view.MainActivity"
 >
 
     <data>
@@ -8,23 +9,27 @@
         <import type="android.view.View"/>
 
         <variable
-                name="viewModel"
-                type="com.nabil.rateme.viewmodel.MoviesViewModel"/>
+                name="isProgress"
+                type="boolean"/>
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:background="@android:color/darker_gray"
+            tools:showIn="@layout/activity_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvMovies"
-                android:visibility="@{viewModel.progressLiveData == true ? View.GONE :View.VISIBLE}"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:visibility="@{isProgress ? View.GONE :View.VISIBLE }"
                 android:layout_width="0dp"
-                android:layout_height="0dp" app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="0dp"
+                android:background="@color/colorPrimary"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
 
@@ -32,7 +37,7 @@
                 android:id="@+id/progress"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:visibility="@{viewModel.progressLiveData==false ? View.GONE :View.VISIBLE,default =gone}"
+                android:visibility="@{isProgress ? View.GONE :View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

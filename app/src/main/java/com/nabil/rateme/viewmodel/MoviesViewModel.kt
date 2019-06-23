@@ -36,9 +36,9 @@ class MoviesViewModel @Inject constructor(
         val subscribe = moviesRepository.loadAllMovies()
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
-            .doOnSubscribe { progressLiveData.postValue(true )}
-            .doFinally { progressLiveData.postValue(false )}
-            .subscribe({ movies: List<Movie>? -> moviesLiveData.value = movies },
+            .doOnSubscribe { progressLiveData.value = true }
+            .doFinally { progressLiveData.value = false }
+            .subscribe({ movies: List<Movie> -> moviesLiveData.value = movies },
                 { t: Throwable? -> errorLiveData.value = t!!.message })
         disposable.add(subscribe)
     }

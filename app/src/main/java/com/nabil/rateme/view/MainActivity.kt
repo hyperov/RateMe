@@ -1,15 +1,19 @@
 package com.nabil.rateme.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.nabil.rateme.R
 import com.nabil.rateme.databinding.ActivityMainBinding
+import com.nabil.rateme.databinding.ContentMainBinding
 import com.nabil.rateme.model.Movie
 import com.nabil.rateme.viewmodel.MoviesViewModel
 import com.nabil.rateme.viewmodel.ViewModelFactory
@@ -17,7 +21,6 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
-import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasAndroidInjector {
@@ -30,7 +33,9 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
 
     lateinit var moviesViewModel: MoviesViewModel
     private lateinit var activityMainBinding: ActivityMainBinding
-    private lateinit var adapter: MoviesAdapter
+    private lateinit var contentMainBinding: ContentMainBinding
+
+    private var adapter: MoviesAdapter? = null
 
 
     override fun androidInjector(): AndroidInjector<Any> {
@@ -40,19 +45,25 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        setSupportActionBar(toolbar)
+        setContentView()
         createViewModel()
-        createViewModelObservers()
         setViewModelBinding()
+        createViewModelObservers()
         viewMovies()
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+//        fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                .setAction("Action", null).show()
+//        }
     }
 
+    private fun setContentView() {
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        contentMainBinding = activityMainBinding.content
+        setSupportActionBar(activityMainBinding.toolbar)
+    }
+
+    @SuppressLint("ResourceType")
     private fun viewMovies() {
         val movies = resources.getStringArray(R.array.movies)
         val images = resources.obtainTypedArray(R.array.images)
@@ -80,23 +91,35 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
             movie9,
             movie10
         )
-
-
         images.recycle()
+
+        moviesViewModel.loadMovies()
     }
 
     private fun setViewModelBinding() {
-        activityMainBinding.viewModel = moviesViewModel
+//        activityMainBinding.lifecycleOwner = this
+//        activityMainBinding.isProgress = false
     }
 
     private fun createViewModelObservers() {
         moviesViewModel.errorLiveData.observe(this, Observer<String?> {
             activityMainBinding.root.showSnackBar(it!!)
+            Log.e("error observer", it)
         })
 
         moviesViewModel.moviesLiveData.observe(this, Observer {
-            adapter = MoviesAdapter()
-            adapter.swapData(it!!)
+
+            if (adapter == null) {
+                adapter = MoviesAdapter(it)
+//                { ad -> selectAd(ad) }
+                contentMainBinding.rvMovies.adapter = adapter
+            } else adapter!!.swapData(it)
+
+        })
+
+        moviesViewModel.progressLiveData.observe(this, Observer {
+            Log.d("progress livedata", it.toString())
+            activityMainBinding.isProgress = it!!
         })
     }
 
@@ -105,22 +128,18 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    fun View.showSnackBar(message: String) {
+    private fun View.showSnackBar(message: String) {
         Snackbar.make(this, message, Snackbar.LENGTH_LONG)
             .show()
     }

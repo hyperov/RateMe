@@ -7,19 +7,20 @@
     <data>
 
         <variable
-                name="viewModel"
-                type="com.nabil.rateme.viewmodel.MoviesViewModel"/>
+                name="isProgress"
+                type="boolean"/>
 
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"
             tools:context=".view.MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
@@ -31,8 +32,10 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <include layout="@layout/content_main"
-                 bind:viewModel="@{viewModel}"/>
+        <include
+                android:id="@+id/content"
+                layout="@layout/content_main"
+                bind:isProgress="@{isProgress}"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"

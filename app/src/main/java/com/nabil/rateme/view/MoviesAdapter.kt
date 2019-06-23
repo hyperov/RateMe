@@ -5,19 +5,24 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.nabil.rateme.R
 import com.nabil.rateme.databinding.ItemMovieBinding
 import com.nabil.rateme.model.Movie
 import com.squareup.picasso.Picasso
 import java.util.*
 
-class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
+class MoviesAdapter(private var data: List<Movie> = ArrayList()) :
+    RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
 
-    private var data: List<Movie> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val recipeBinding = ItemMovieBinding.inflate(layoutInflater)
+        val recipeBinding = DataBindingUtil.inflate<ItemMovieBinding>(
+            layoutInflater,
+            R.layout.item_movie, parent, false
+        )
 
         return MovieViewHolder(recipeBinding)
     }
