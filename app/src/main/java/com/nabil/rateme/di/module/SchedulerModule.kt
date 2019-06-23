@@ -9,6 +9,9 @@ import javax.inject.Singleton
 @Module
 class SchedulerModule {
 
+//    @Binds
+//    internal abstract fun getScheduler(provider: SchedulerProvider): BaseSchedulerProvider
+
     @Singleton
     @Provides
     fun getScheduler(): BaseSchedulerProvider {

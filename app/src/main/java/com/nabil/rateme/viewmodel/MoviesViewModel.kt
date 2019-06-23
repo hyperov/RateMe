@@ -10,10 +10,10 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-class MoviesViewModel @Inject constructor(val moviesRepository: Repository) : ViewModel() {
-
-    @Inject
-    lateinit var schedulerProvider: BaseSchedulerProvider
+class MoviesViewModel @Inject constructor(
+    val moviesRepository: Repository,
+    val schedulerProvider: BaseSchedulerProvider
+) : ViewModel() {
 
     val progressLiveData = SingleLiveEvent<Boolean>()
     val errorLiveData = MutableLiveData<String>()

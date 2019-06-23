@@ -12,7 +12,7 @@ interface BaseSchedulerProvider {
 
 class SchedulerProvider : BaseSchedulerProvider {
     override fun computation() = Schedulers.computation()
-    override fun ui() = AndroidSchedulers.mainThread()
+    override fun ui(): Scheduler = AndroidSchedulers.mainThread()
     override fun io() = Schedulers.io()
 }
 

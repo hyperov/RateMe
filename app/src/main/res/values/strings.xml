@@ -1,4 +1,30 @@
 <resources>
     <string name="app_name">Rate Me</string>
     <string name="action_settings">Settings</string>
+
+    <string-array name="movies">
+        <item>Rick and Morty</item>
+        <item>Game Of Thrones</item>
+        <item>Spider-Man: Into the Spider-Verse</item>
+        <item>Avengers: Endgame</item>
+        <item>Harry potter and the Goblet of fire</item>
+        <item>Guardians of the Galaxy</item>
+        <item>Jumanji: Welcome to the Jungle</item>
+        <item>A Series of Unfortunate Events</item>
+        <item>The Lego Movie</item>
+        <item>Deadpool</item>
+    </string-array>
+
+    <integer-array name="images">
+        <item>@drawable/rick_and_morty</item>
+        <item>@drawable/game_of_thrones</item>
+        <item>@drawable/spiderman_into_the_spider_verse</item>
+        <item>@drawable/avengers_endgame</item>
+        <item>@drawable/harrypotter</item>
+        <item>@drawable/guardians_of_the_galaxy</item>
+        <item>@drawable/jumanji</item>
+        <item>@drawable/series_of_unfortinate_events</item>
+        <item>@drawable/lego</item>
+        <item>@drawable/deadpool</item>
+    </integer-array>
 </resources>

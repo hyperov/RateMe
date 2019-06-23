@@ -25,8 +25,7 @@ class MoviesViewModelTest {
     @Before
     fun setUp() {
         moviesRepository = mock(MoviesRepository::class.java)
-        mainViewModel = MoviesViewModel(moviesRepository)
-        mainViewModel.schedulerProvider = TrampolineSchedulerProvider()
+        mainViewModel = MoviesViewModel(moviesRepository,  TrampolineSchedulerProvider())
         progressObserver = mock(Observer<Boolean> {}.javaClass)
         errorObserver = mock(Observer<String> {}.javaClass)
         moviesObserver = mock(Observer<List<Movie>> {}.javaClass)
