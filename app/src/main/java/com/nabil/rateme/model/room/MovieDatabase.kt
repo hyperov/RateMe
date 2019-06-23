@@ -8,7 +8,7 @@ import com.nabil.rateme.model.Movie
  * Room Database class include intites,version number
  * and schema settings
  */
-@Database(entities = [Movie::class], version = 3, exportSchema = false)
+@Database(entities = [Movie::class], version = 1, exportSchema = false)
 abstract class MovieDatabase : RoomDatabase() {
     abstract fun getMoviesDao(): MovieDAO
 }

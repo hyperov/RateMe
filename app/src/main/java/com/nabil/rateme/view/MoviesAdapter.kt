@@ -44,7 +44,7 @@ class MoviesAdapter(
 
         fun bind(item: Movie) = run {
             itemViewBinding.movie = item
-            itemViewBinding.ratingBar.setOnRatingBarChangeListener { ratingBar: RatingBar?, rating: Float, fromUser: Boolean ->
+            itemViewBinding.ratingBar.setOnRatingBarChangeListener { _: RatingBar?, rating: Float, _: Boolean ->
                 onItemRatingClick(rating, item.name)
             }
         }
