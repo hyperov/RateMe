@@ -37,13 +37,20 @@
                 layout="@layout/content_main"
                 bind:isProgress="@{isProgress}"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
+
+        <com.robertlevonyan.views.customfloatingactionbutton.FloatingActionButton
+                android:id="@+id/custom_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
                 android:layout_margin="@dimen/fab_margin"
-                app:srcCompat="@android:drawable/ic_dialog_email"/>
-
+                app:fabIcon="@android:drawable/stat_notify_sync"
+                android:layout_gravity="bottom|end"
+                app:fabType="roundedSquare"
+                app:fabRippleColor="@color/colorFabIcon"
+                app:fabText="@string/random_rating"
+                app:fabSize="auto"
+                app:fabElevation="8dp"
+                android:padding="@dimen/default_margin"
+                android:text="@string/random_rating"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

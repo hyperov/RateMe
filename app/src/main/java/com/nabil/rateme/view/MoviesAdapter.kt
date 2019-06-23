@@ -53,5 +53,5 @@ class MoviesAdapter(
 
 @BindingAdapter("image_picasso")
 fun setImageViewResource(imageView: ImageView, @DrawableRes resource: Int) {
-    Picasso.get().load(resource).into(imageView)
+    imageView.setImageResource(resource)
 }
