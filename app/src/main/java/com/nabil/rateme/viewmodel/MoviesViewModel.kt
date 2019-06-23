@@ -48,8 +48,6 @@ class MoviesViewModel @Inject constructor(
             .fromCallable { moviesRepository.updateMovieRating(name, rating) }
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
-            .doOnSubscribe { progressLiveData.value = true }
-            .doFinally { progressLiveData.value = false }
             .subscribe({}, { t: Throwable? -> errorLiveData.value = t!!.message })
         disposable.add(subscribe)
     }

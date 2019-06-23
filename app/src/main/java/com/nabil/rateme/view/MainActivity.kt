@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DefaultItemAnimator
 import com.google.android.material.snackbar.Snackbar
 import com.nabil.rateme.R
 import com.nabil.rateme.databinding.ActivityMainBinding
@@ -47,20 +48,16 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         super.onCreate(savedInstanceState)
         setContentView()
         createViewModel()
-        setViewModelBinding()
         createViewModelObservers()
         viewMovies()
 
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
     }
 
     private fun setContentView() {
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         contentMainBinding = activityMainBinding.content
         setSupportActionBar(activityMainBinding.toolbar)
+        contentMainBinding.rvMovies.itemAnimator = DefaultItemAnimator()
     }
 
     @SuppressLint("ResourceType")
@@ -96,10 +93,6 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         moviesViewModel.loadMovies()
     }
 
-    private fun setViewModelBinding() {
-//        activityMainBinding.lifecycleOwner = this
-//        activityMainBinding.isProgress = false
-    }
 
     private fun createViewModelObservers() {
         moviesViewModel.errorLiveData.observe(this, Observer<String?> {
@@ -109,10 +102,11 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
 
         moviesViewModel.moviesLiveData.observe(this, Observer {
 
+            val sortedByDescendingList = it!!.sortedByDescending { movie -> movie.rating }
             if (adapter == null) {
-                adapter = MoviesAdapter(it) { rating,name -> updateRating(rating,name) }
+                adapter = MoviesAdapter(sortedByDescendingList) { rating, name -> updateRating(rating, name) }
                 contentMainBinding.rvMovies.adapter = adapter
-            } else adapter!!.swapData(it)
+            } else adapter!!.swapData(sortedByDescendingList)
 
         })
 
@@ -123,7 +117,7 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
     }
 
     private fun updateRating(rating: Float, name: String) {
-
+        moviesViewModel.updateMovie(name, rating)
     }
 
     private fun createViewModel() {

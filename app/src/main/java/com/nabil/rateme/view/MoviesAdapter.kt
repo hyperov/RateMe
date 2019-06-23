@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nabil.rateme.R
 import com.nabil.rateme.databinding.ItemMovieBinding
 import com.nabil.rateme.model.Movie
-import com.squareup.picasso.Picasso
 import java.util.*
 
 class MoviesAdapter(
@@ -45,7 +44,8 @@ class MoviesAdapter(
         fun bind(item: Movie) = run {
             itemViewBinding.movie = item
             itemViewBinding.ratingBar.setOnRatingBarChangeListener { _: RatingBar?, rating: Float, _: Boolean ->
-                onItemRatingClick(rating, item.name)
+                if (rating != item.rating)
+                    onItemRatingClick(rating, item.name)
             }
         }
     }
