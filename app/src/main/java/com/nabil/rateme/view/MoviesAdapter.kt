@@ -3,6 +3,7 @@ package com.nabil.rateme.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
@@ -13,7 +14,10 @@ import com.nabil.rateme.model.Movie
 import com.squareup.picasso.Picasso
 import java.util.*
 
-class MoviesAdapter(private var data: List<Movie> = ArrayList()) :
+class MoviesAdapter(
+    private var data: List<Movie> = ArrayList(),
+    private val onItemRatingClick: (rating: Float, movieName: String) -> Unit
+) :
     RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
 
 
@@ -36,9 +40,14 @@ class MoviesAdapter(private var data: List<Movie> = ArrayList()) :
         notifyDataSetChanged()
     }
 
-    class MovieViewHolder(var itemViewBinding: ItemMovieBinding) : RecyclerView.ViewHolder(itemViewBinding.root) {
+    inner class MovieViewHolder(var itemViewBinding: ItemMovieBinding) : RecyclerView.ViewHolder(itemViewBinding.root) {
 
-        fun bind(item: Movie) = run { itemViewBinding.movie = item }
+        fun bind(item: Movie) = run {
+            itemViewBinding.movie = item
+            itemViewBinding.ratingBar.setOnRatingBarChangeListener { ratingBar: RatingBar?, rating: Float, fromUser: Boolean ->
+                onItemRatingClick(rating, item.name)
+            }
+        }
     }
 }
 

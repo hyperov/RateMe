@@ -9,5 +9,5 @@ data class Movie(
     @PrimaryKey(autoGenerate = true) var id: Long? = null,
     var name: String,
     var image: Int,
-    var rating: Int
+    var rating: Float
 )

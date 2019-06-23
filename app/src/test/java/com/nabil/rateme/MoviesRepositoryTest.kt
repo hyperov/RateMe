@@ -33,7 +33,7 @@ class MoviesRepositoryTest {
 
     @Test
     fun test_insertAllMovies_in_database_true() {
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(movieDAO.insertAllMovies(movie))
             .thenReturn(listOf(1))
@@ -44,7 +44,7 @@ class MoviesRepositoryTest {
 
     @Test
     fun test_loadAllMovies_in_database_true() {
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(movieDAO.loadAllMovies())
             .thenReturn(Observable.just(listOf(movie)))
@@ -57,7 +57,7 @@ class MoviesRepositoryTest {
     @Test
     fun test_updateMovieRating_in_database_true() {
 
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(movieDAO.updateMovieRating(movie.name, movie.rating))
             .thenReturn(1)

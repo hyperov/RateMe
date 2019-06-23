@@ -17,7 +17,7 @@ class MoviesRepository @Inject constructor(val database: MovieDatabase) : Reposi
         return movieDAO.loadAllMovies()
     }
 
-    override fun updateMovieRating(movieName: String, rating: Int): Int {
+    override fun updateMovieRating(movieName: String, rating: Float): Int {
         return movieDAO.updateMovieRating(movieName, rating)
     }
 }

@@ -41,7 +41,7 @@ class MoviesViewModelTest {
 
     @Test
     fun test_insertMovies_in_repository_is_invoked() {
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(moviesRepository.insertAllMovies(movie))
             .thenReturn(listOf(1))
@@ -62,7 +62,7 @@ class MoviesViewModelTest {
 
     @Test
     fun test_updateMovies_in_repository_is_invoked() {
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(moviesRepository.updateMovieRating(movie.name, movie.rating))
             .thenReturn(2)
@@ -89,7 +89,7 @@ class MoviesViewModelTest {
     @Test
     fun test_progressLiveData_value_from_loadMovies() {
 
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(moviesRepository.loadAllMovies())
             .thenReturn(Observable.just(listOf(movie)))
@@ -105,7 +105,7 @@ class MoviesViewModelTest {
     @Test
     fun test_progressLiveData_value_from_insertMovies() {
 
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(moviesRepository.insertAllMovies(movie))
             .thenReturn(listOf(1))
@@ -118,7 +118,7 @@ class MoviesViewModelTest {
     @Test
     fun test_progressLiveData_value_from_updateMovies() {
 
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(moviesRepository.updateMovieRating(movie.name, movie.rating))
             .thenReturn(1)
@@ -142,7 +142,7 @@ class MoviesViewModelTest {
 
     @Test
     fun test_errorLiveData_value_insertMovies() {
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(moviesRepository.insertAllMovies(movie))
             .then { null }
@@ -154,7 +154,7 @@ class MoviesViewModelTest {
     @Test
     fun test_errorLiveData_value_updateMovies() {
 
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(moviesRepository.updateMovieRating(movie.name, movie.rating))
             .then {Exception("error") }
@@ -168,7 +168,7 @@ class MoviesViewModelTest {
     @Test
     fun test_moviesLiveData_value() {
 
-        val movie = Movie(name = "Avengers", image = 4, rating = 9)
+        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(moviesRepository.loadAllMovies())
             .thenReturn(Observable.just(listOf(movie)))

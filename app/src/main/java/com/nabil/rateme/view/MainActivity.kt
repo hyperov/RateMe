@@ -68,16 +68,16 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         val movies = resources.getStringArray(R.array.movies)
         val images = resources.obtainTypedArray(R.array.images)
 
-        val movie1 = Movie(name = movies[0], rating = 0, image = images.getResourceId(0, 0))
-        val movie2 = Movie(name = movies[1], rating = 0, image = images.getResourceId(1, 0))
-        val movie3 = Movie(name = movies[2], rating = 0, image = images.getResourceId(2, 0))
-        val movie4 = Movie(name = movies[3], rating = 0, image = images.getResourceId(3, 0))
-        val movie5 = Movie(name = movies[4], rating = 0, image = images.getResourceId(4, 0))
-        val movie6 = Movie(name = movies[5], rating = 0, image = images.getResourceId(5, 0))
-        val movie7 = Movie(name = movies[6], rating = 0, image = images.getResourceId(6, 0))
-        val movie8 = Movie(name = movies[7], rating = 0, image = images.getResourceId(7, 0))
-        val movie9 = Movie(name = movies[8], rating = 0, image = images.getResourceId(8, 0))
-        val movie10 = Movie(name = movies[9], rating = 0, image = images.getResourceId(9, 0))
+        val movie1 = Movie(name = movies[0], rating = 0F, image = images.getResourceId(0, 0))
+        val movie2 = Movie(name = movies[1], rating = 0F, image = images.getResourceId(1, 0))
+        val movie3 = Movie(name = movies[2], rating = 0F, image = images.getResourceId(2, 0))
+        val movie4 = Movie(name = movies[3], rating = 0F, image = images.getResourceId(3, 0))
+        val movie5 = Movie(name = movies[4], rating = 0F, image = images.getResourceId(4, 0))
+        val movie6 = Movie(name = movies[5], rating = 0F, image = images.getResourceId(5, 0))
+        val movie7 = Movie(name = movies[6], rating = 0F, image = images.getResourceId(6, 0))
+        val movie8 = Movie(name = movies[7], rating = 0F, image = images.getResourceId(7, 0))
+        val movie9 = Movie(name = movies[8], rating = 0F, image = images.getResourceId(8, 0))
+        val movie10 = Movie(name = movies[9], rating = 0F, image = images.getResourceId(9, 0))
 
         moviesViewModel.insertMovies(
             movie1,
@@ -110,8 +110,7 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         moviesViewModel.moviesLiveData.observe(this, Observer {
 
             if (adapter == null) {
-                adapter = MoviesAdapter(it)
-//                { ad -> selectAd(ad) }
+                adapter = MoviesAdapter(it) { rating,name -> updateRating(rating,name) }
                 contentMainBinding.rvMovies.adapter = adapter
             } else adapter!!.swapData(it)
 
@@ -121,6 +120,10 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
             Log.d("progress livedata", it.toString())
             activityMainBinding.isProgress = it!!
         })
+    }
+
+    private fun updateRating(rating: Float, name: String) {
+
     }
 
     private fun createViewModel() {

@@ -43,7 +43,7 @@ class MoviesViewModel @Inject constructor(
         disposable.add(subscribe)
     }
 
-    fun updateMovie(name: String, rating: Int) {
+    fun updateMovie(name: String, rating: Float) {
         val subscribe = Observable
             .fromCallable { moviesRepository.updateMovieRating(name, rating) }
             .subscribeOn(schedulerProvider.io())

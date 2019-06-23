@@ -52,7 +52,7 @@ class RoomTest {
     @Test
     fun test_insert_and_select_movies() {
 
-        val movie = Movie(name = "spider man", image = 4, rating = 3)
+        val movie = Movie(name = "spider man", image = 4, rating = 3F)
         movieDAO.insertAllMovies(movie)
         val observer = movieDAO.loadAllMovies().test()
         observer.assertNoErrors()
@@ -63,16 +63,16 @@ class RoomTest {
     @Test
     fun test_update_movie_by_name() {
 
-        val movie = Movie(name = "spider man", image = 4, rating = 3)
+        val movie = Movie(name = "spider man", image = 4, rating = 3F)
 
         movieDAO.insertAllMovies(movie)
         movieDAO.loadAllMovies().test().assertValueCount(1)
 
-        val update = movieDAO.updateMovieRating("spider man", 8)
+        val update = movieDAO.updateMovieRating("spider man", 8F)
         assert(update == 1)
 
         movieDAO.loadAllMovies().test().assertValue { list: List<Movie> ->
-            list[0].name.contentEquals(movie.name) && list[0].rating == 8
+            list[0].name.contentEquals(movie.name) && list[0].rating == 8F
         }
     }
 }
