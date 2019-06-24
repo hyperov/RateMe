@@ -59,13 +59,13 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginStart="8dp"/>
                 <RatingBar
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/ratingBar"
                         android:rating="@{movie.rating}"
                         app:layout_constraintTop_toBottomOf="@+id/tvMovie"
-                        app:layout_constraintStart_toStartOf="@+id/tvMovie"
-                        app:layout_constraintEnd_toEndOf="@+id/tvMovie"
+                        app:layout_constraintStart_toStartOf="@+id/ivMovie"
+                        app:layout_constraintEnd_toEndOf="@+id/ivMovie"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="8dp"/>

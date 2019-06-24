@@ -35,7 +35,7 @@ class MoviesAdapter(
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) = holder.bind(data[position])
 
     fun swapData(data: List<Movie>) {
-        this.data = data
+        this.data = data.sortedByDescending { it.rating }
         notifyDataSetChanged()
     }
 

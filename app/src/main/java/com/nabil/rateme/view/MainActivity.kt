@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
 
 
     private var adapter: MoviesAdapter? = null
-    var isRandomStop = false
+    var isRandomStop = true
 
 
     override fun androidInjector(): AndroidInjector<Any> {
@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         contentMainBinding = activityMainBinding.content
         setSupportActionBar(activityMainBinding.toolbar)
         contentMainBinding.rvMovies.itemAnimator = DefaultItemAnimator()
+        activityMainBinding.customFab.setOnClickListener { updateRandomRating() }
     }
 
     @SuppressLint("ResourceType")
@@ -131,9 +132,11 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
         moviesViewModel.updateMovie(rating, name)
     }
 
-    private fun updateRandomRating(rating: Float) {
+    private fun updateRandomRating() {
         isRandomStop = !isRandomStop
-        moviesViewModel.updateRandomMovie(rating, movies, isRandomStop)
+        if (isRandomStop) moviesViewModel.randomDisposable?.dispose()
+        else
+            moviesViewModel.updateRandomMovie(movies, isRandomStop)
     }
 
     private fun createViewModel() {

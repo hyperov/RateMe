@@ -17,7 +17,7 @@ class MoviesViewModel @Inject constructor(
     val schedulerProvider: BaseSchedulerProvider
 ) : ViewModel() {
 
-    private lateinit var randomDisposable: Disposable
+    lateinit var randomDisposable: Disposable
     val progressLiveData = SingleLiveEvent<Boolean>()
     val errorLiveData = MutableLiveData<String>()
     val moviesLiveData = MutableLiveData<List<Movie>>()
@@ -47,16 +47,24 @@ class MoviesViewModel @Inject constructor(
         disposable.add(subscribe)
     }
 
-    fun updateRandomMovie(rating: Float, movies: Array<String>, randomStop: Boolean) {
+    fun updateRandomMovie(movies: Array<String>, randomStop: Boolean) {
         randomDisposable = Observable
             .just((0..9).random())
             .repeat()
-            .delay(2, TimeUnit.SECONDS)
+            .delay(1, TimeUnit.SECONDS)
             .map { movies[it] }
-            .flatMap { name -> Observable.fromCallable { moviesRepository.updateMovieRating(name, rating) } }
+            .flatMap { name ->
+                Observable.fromCallable {
+                    moviesRepository.updateMovieRating(
+                        name,
+                        (1..5).random().toFloat()
+                    )
+                }
+            }
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.ui())
-            .subscribe({ t -> updateLiveData.value = t }, { t: Throwable? -> errorLiveData.value = t!!.message })
+            .subscribe({ t -> updateLiveData.value = t },
+                { t: Throwable? -> errorLiveData.value = t!!.message })
         disposable.add(randomDisposable)
         if (randomStop) randomDisposable.dispose()
     }
