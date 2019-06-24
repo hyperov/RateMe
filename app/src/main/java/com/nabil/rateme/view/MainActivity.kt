@@ -35,8 +35,11 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
     lateinit var moviesViewModel: MoviesViewModel
     private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var contentMainBinding: ContentMainBinding
+    private lateinit var movies: Array<String>
+
 
     private var adapter: MoviesAdapter? = null
+    var isRandomStop = false
 
 
     override fun androidInjector(): AndroidInjector<Any> {
@@ -62,7 +65,7 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
 
     @SuppressLint("ResourceType")
     private fun viewMovies() {
-        val movies = resources.getStringArray(R.array.movies)
+        movies = resources.getStringArray(R.array.movies)
         val images = resources.obtainTypedArray(R.array.images)
 
         val movie1 = Movie(name = movies[0], rating = 0F, image = images.getResourceId(0, 0))
@@ -95,9 +98,15 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
 
 
     private fun createViewModelObservers() {
+
         moviesViewModel.errorLiveData.observe(this, Observer<String?> {
             activityMainBinding.root.showSnackBar(it!!)
             Log.e("error observer", it)
+        })
+
+        moviesViewModel.progressLiveData.observe(this, Observer {
+            Log.d("progress livedata", it.toString())
+            activityMainBinding.isProgress = it!!
         })
 
         moviesViewModel.moviesLiveData.observe(this, Observer {
@@ -110,14 +119,21 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
 
         })
 
-        moviesViewModel.progressLiveData.observe(this, Observer {
-            Log.d("progress livedata", it.toString())
-            activityMainBinding.isProgress = it!!
+        moviesViewModel.updateLiveData.observe(this, Observer {
+            adapter?.apply {
+                notifyDataSetChanged()
+            }
         })
+
     }
 
     private fun updateRating(rating: Float, name: String) {
-        moviesViewModel.updateMovie(name, rating)
+        moviesViewModel.updateMovie(rating, name)
+    }
+
+    private fun updateRandomRating(rating: Float) {
+        isRandomStop = !isRandomStop
+        moviesViewModel.updateRandomMovie(rating, movies, isRandomStop)
     }
 
     private fun createViewModel() {

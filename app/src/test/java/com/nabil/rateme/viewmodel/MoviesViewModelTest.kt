@@ -8,6 +8,7 @@ import com.nabil.rateme.model.MoviesRepository
 import com.nabil.rateme.model.Repository
 import io.reactivex.Observable
 import org.junit.*
+import org.mockito.Mockito
 import org.mockito.Mockito.*
 
 
@@ -25,7 +26,7 @@ class MoviesViewModelTest {
     @Before
     fun setUp() {
         moviesRepository = mock(MoviesRepository::class.java)
-        mainViewModel = MoviesViewModel(moviesRepository,  TrampolineSchedulerProvider())
+        mainViewModel = MoviesViewModel(moviesRepository, TrampolineSchedulerProvider())
         progressObserver = mock(Observer<Boolean> {}.javaClass)
         errorObserver = mock(Observer<String> {}.javaClass)
         moviesObserver = mock(Observer<List<Movie>> {}.javaClass)
@@ -67,7 +68,8 @@ class MoviesViewModelTest {
         `when`(moviesRepository.updateMovieRating(movie.name, movie.rating))
             .thenReturn(2)
 
-        mainViewModel.updateMovie(movie.name, movie.rating)
+
+        mainViewModel.updateMovie(movie.rating, movie.name)
         verify(moviesRepository).updateMovieRating(movie.name, movie.rating)
     }
 
@@ -116,19 +118,6 @@ class MoviesViewModelTest {
     }
 
     @Test
-    fun test_progressLiveData_value_from_updateMovies() {
-
-        val movie = Movie(name = "Avengers", image = 4, rating = 9F)
-
-        `when`(moviesRepository.updateMovieRating(movie.name, movie.rating))
-            .thenReturn(1)
-
-        mainViewModel.updateMovie(movie.name, movie.rating)
-        verify(progressObserver).onChanged(true)
-        verify(progressObserver).onChanged(false)
-    }
-
-    @Test
     fun test_errorLiveData_value_loadMovies() {
 
         `when`(moviesRepository.loadAllMovies())
@@ -157,9 +146,9 @@ class MoviesViewModelTest {
         val movie = Movie(name = "Avengers", image = 4, rating = 9F)
 
         `when`(moviesRepository.updateMovieRating(movie.name, movie.rating))
-            .then {Exception("error") }
+            .then { Exception("error") }
 
-        mainViewModel.updateMovie(movie.name, movie.rating)
+        mainViewModel.updateMovie(movie.rating, movie.name)
 
         verify(errorObserver).onChanged("java.lang.Exception cannot be cast to java.lang.Integer")
 
